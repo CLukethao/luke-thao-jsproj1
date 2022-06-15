@@ -1,0 +1,411 @@
+!DOCTYPE html>
+
+<html>
+
+<body>
+
+
+
+
+
+<div id='form'>
+
+  <! put your HTML code to input data here >
+
+
+
+
+
+  <label for="fName">First Name:</label>
+
+  <input id='fName' name="fName" type="text" />
+
+  <br>
+
+
+
+  <label for="lName">Last Name:</label>
+
+  <input id='lName' name='lName' type="text" />
+
+  <br>
+
+
+
+  <label for="userId">User Id:</label>
+
+  <input id='userId' name='userId' type="text" />
+
+  <br>
+
+
+
+  <label for="birthday">Birthday: </label>
+
+  <input id='birthday' name='birthday' type="date" />
+
+  <br>
+
+
+
+  <button onclick='submit()'> Accept </button
+
+
+
+</div>
+
+
+
+
+
+
+
+<script>
+
+
+
+  const form = document.getElementById('form')
+
+  const uid = document.getElementById('userId')
+
+  const fname = document.getElementById('fName')
+
+  const lname = document.getElementById('lName')
+
+  const birthday = document.getElementById("birthday")
+
+
+
+  const uidCheck = () => {
+
+
+
+    const userId = uid.value
+
+
+
+    let hasNum = false
+
+    let hasUpper = false
+
+    let hasLower = false
+
+
+
+    if (userId.length >= 8 && userId.length <= 12) {
+
+
+
+      for (let i = 0; i < userId.length; i++) {
+
+
+
+        //break for loop if condition has been met
+
+        if (hasNum && hasUpper && hasLower) {
+
+          break
+
+        }
+
+
+
+
+
+        else {
+
+
+
+          //if string char is letter
+
+          if (isNaN(parseInt(userId[i]))) {
+
+
+
+            if (userId[i] === userId[i].toUpperCase()) {
+
+              hasUpper = true
+
+            }
+
+
+
+            else if (userId[i] === userId[i].toLowerCase()) {
+
+              hasLower = true
+
+            }
+
+
+
+          }
+
+
+
+          //if string char is num
+
+          else {
+
+            hasNum = true
+
+          }
+
+        }
+
+      }
+
+    }
+
+
+
+    //passed check
+
+    if (hasNum && hasLower && hasUpper) {
+
+      return true
+
+    }
+
+
+
+    //failed check
+
+    else {
+
+      insertError(uid, 'Invalid User Id')
+
+
+
+      return false
+
+    }
+
+  }
+
+
+
+
+
+
+
+  const fNameCheck = () => {
+
+
+
+    //passed check
+
+    if (fname.value.length < 1) {
+
+      insertError(fname, 'Invalid First Name')
+
+
+
+      return false
+
+    }
+
+
+
+    //failed check
+
+    else return fname.value
+
+
+
+  }
+
+
+
+  const lNameCheck = () => {
+
+
+
+    //passed check
+
+    if (lname.value.length < 1) {
+
+
+
+      insertError(lname, 'Invalid Last Name')
+
+
+
+      return false
+
+    }
+
+
+
+    //failed check
+
+    else return lname.value
+
+  }
+
+
+
+  const birthdayCheck = () => {
+
+
+
+    //if date has been entered
+
+    if (parseInt(birthday.valueAsNumber)) {
+
+
+
+      let currentDate = new Date()
+
+
+
+      currentDate.setHours(0, 0, 0, 0) //set hours to midnight
+
+
+
+      const oneDay = 1000 * 60 * 60 * 24; //one day in miliseconds
+
+
+
+      let dateDiff = currentDate.getTime() - birthday.valueAsNumber //diff in dates in ms
+
+
+
+      const diffInDays = Math.round(dateDiff / oneDay); //diff in days
+
+
+
+      //if not 18
+
+      if (diffInDays < 365*18) {
+
+        insertError(birthday, 'You are probably not old enough to take this class!')
+
+      }
+
+
+
+      //if 18 or older
+
+      else {
+
+        return diffInDays
+
+      }
+
+
+
+    }
+
+
+
+    //No date entered
+
+    else {
+
+
+
+      insertError(birthday, 'Invalid Birth Date')
+
+
+
+      return false
+
+    }
+
+
+
+  }
+
+
+
+  //insert error message after input element
+
+  const insertError = (existingNode, errMess) => {
+
+
+
+    let error = document.createElement("span")
+
+
+
+    error.innerHTML = `<span style="color: red">${errMess}</span>`
+
+
+
+    existingNode.parentNode.insertBefore(error, existingNode.nextSibling);
+
+  }
+
+
+
+  const submit = () => {
+
+
+
+    //clear notification spans after each submit
+
+    Array.prototype.slice.call(document.getElementsByTagName('span')).forEach(
+
+            function(item) {
+
+              item.remove()
+
+            }
+
+    )
+
+
+
+    //input verification
+
+    const uidPass = uidCheck()
+
+    const fnamePass = fNameCheck()
+
+    const lnamePass = lNameCheck()
+
+    const birthdayPass = birthdayCheck()
+
+    if (uidPass && fnamePass && lnamePass && birthdayPass) {
+
+
+
+      let success = document.createElement("span")
+
+
+
+      success.innerHTML = `<span style="color: green">${fnamePass} ${lnamePass} you have been breathing for ${birthdayPass} days!</span>`
+
+
+
+      form.parentNode.insertBefore(success, form.nextSibling);
+
+    }
+
+  }
+
+  let xLoop = document.createElement('div')
+
+
+
+  for (let i = 1; i <= 20; i++) {
+
+
+
+    let jeez = 'x'
+
+
+
+    xLoop.innerHTML = xLoop.innerHTML + jeez.padStart(i, 'x') + '</br>'
+
+  }
+
+
+
+  form.parentNode.insertBefore(xLoop, form.nextSibling);
+
+</script>
+
+</body>
+
+</html>
